@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MotionDiv } from "./MotionDiv";
 
 export interface AnimeProp {
   id: string;
@@ -17,30 +18,41 @@ interface Prop {
   index: number;
 }
 
-function AnimeCard({ anime }: Prop) {
+const variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
+function AnimeCard({ anime, index }: Prop) {
   return (
-    <div className="max-w-sm rounded relative w-full">
-      <div className="relative w-full h-[37vh]">
+    <MotionDiv
+      className="relative w-full max-w-sm rounded"
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      transition={{ delay: index * 0.15, duration: 0.5, ease: "easeInOut" }}
+    >
+      <div className="relative h-[37vh] w-full">
         <Image
-          src={anime.image.original}
+          src={`https://shikimori.one${anime.image.original}`}
           alt={anime.name}
           fill
           className="rounded-xl"
         />
       </div>
-      <div className="py-4 flex flex-col gap-3">
-        <div className="flex justify-between items-center gap-1">
-          <h2 className="font-bold text-white text-xl line-clamp-1 w-full">
+      <div className="flex flex-col gap-3 py-4">
+        <div className="flex items-center justify-between gap-1">
+          <h2 className="line-clamp-1 w-full text-xl font-bold text-white">
             {anime.name}
           </h2>
-          <div className="py-1 px-2 bg-[#161921] rounded-sm">
-            <p className="text-white text-sm font-bold capitalize">
+          <div className="rounded-sm bg-[#161921] px-2 py-1">
+            <p className="text-sm font-bold capitalize text-white">
               {anime.kind}
             </p>
           </div>
         </div>
-        <div className="flex gap-4 items-center">
-          <div className="flex flex-row gap-2 items-center">
+        <div className="flex items-center gap-4">
+          <div className="flex flex-row items-center gap-2">
             <Image
               src="./episodes.svg"
               alt="episodes"
@@ -48,11 +60,11 @@ function AnimeCard({ anime }: Prop) {
               height={20}
               className="object-contain"
             />
-            <p className="text-base text-white font-bold">
+            <p className="text-base font-bold text-white">
               {anime.episodes || anime.episodes_aired}
             </p>
           </div>
-          <div className="flex flex-row gap-2 items-center">
+          <div className="flex flex-row items-center gap-2">
             <Image
               src="./star.svg"
               alt="star"
@@ -64,7 +76,7 @@ function AnimeCard({ anime }: Prop) {
           </div>
         </div>
       </div>
-    </div>
+    </MotionDiv>
   );
 }
 
